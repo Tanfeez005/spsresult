@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Result Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #fdf6e3;
+      color: #333;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    form {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    input, button {
+      padding: 8px 14px;
+      font-size: 16px;
+      margin: 5px;
+      width: 80%;
+      max-width: 250px;
+    }
+
+    button {
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .result-card {
+      background: #fff;
+      width: 100%;
+      max-width: 794px; /* A4 width in pixels @96dpi */
+      min-height: 1123px; /* A4 height @96dpi */
+      padding: 30px;
+      border: 1px solid #000;
+      margin: 0 auto 30px auto;
+      box-shadow: 0px 0px 10px #ccc;
+      box-sizing: border-box;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .header img {
+      width: 80px;
+      height: auto;
+    }
+
+    .school-details {
+      text-align: center;
+      flex: 1;
+    }
+
+    .school-details h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .school-details p {
+      margin: 4px 0;
+    }
+
+    .title {
+      text-align: center;
+      margin: 10px 0;
+      font-weight: bold;
+      font-size: 20px;
+      text-decoration: underline;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #eee8d5;
+    }
+
+    #downloadBtn {
+      display: none;
+      text-align: center;
+    }
+
+    @media screen and (max-width: 600px) {
+      input, button {
+        width: 100%;
+        margin: 10px 0;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .header img {
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Student Result Portal</h1>
+
+  <form id="resultForm">
+    Class: <input type="text" id="class" required />
+    Roll No: <input type="text" id="roll" required />
+    <button type="submit">Get Result</button>
+  </form>
+
+  <div id="result"></div>
+
+  <div style="text-align: center;">
+    <button id="downloadBtn" onclick="downloadPDF()">Download as PDF</button>
+  </div>
+
+  <!-- jsPDF and html2canvas CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+  <script>
+    document.getElementById('resultForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const studentClass = document.getElementById('class').value;
+      const roll = document.getElementById('roll').value;
+
+      const res = await fetch(`/result?class=${studentClass}&roll=${roll}`);
+      const data = await res.json();
+
+      if (data.error) {
+        document.getElementById('result').innerHTML = `<p>${data.error}</p>`;
+        document.getElementById('downloadBtn').style.display = "none";
+        return;
+      }
+
+      const subjectsHtml = data.marks.map(m => `
+        <tr>
+          <td>${m.subject}</td>
+          <td>${m.fullMarks}</td>
+          <td>${m.obtainedMarks}</td>
+        </tr>`).join('');
+
+      document.getElementById('result').innerHTML = `
+        <div class="result-card" id="resultCard">
+          <div class="header">
+            <img src="logo.jpeg" alt="School Logo" />
+            <div class="school-details">
+              <h2>${data.schoolName}</h2>
+              <p>${data.schoolAddress}</p>
+            </div>
+          </div>
+          <div class="title">Terminal Examination Result</div>
+          <p><strong>Name:</strong> ${data.studentName}</p>
+          <p><strong>Father's Name:</strong> ${data.fatherName}</p>
+          <p><strong>Class:</strong> ${data.class}</p>
+          <p><strong>Roll No:</strong> ${data.roll}</p>
+          <hr />
+          <table>
+            <tr><th>Subject</th><th>Full Marks</th><th>Obtained Marks</th></tr>
+            ${subjectsHtml}
+          </table>
+          <hr />
+          <p><strong>Total Marks:</strong> ${data.total}</p>
+          <p><strong>Percentage:</strong> ${data.percentage}%</p>
+          <p><strong>Division:</strong> ${data.division}</p>
+          <p><strong>Remarks:</strong> ${data.description}</p>
+        </div>
+      `;
+      document.getElementById('downloadBtn').style.display = "inline-block";
+    });
+
+    async function downloadPDF() {
+      const resultCard = document.getElementById("resultCard");
+      const canvas = await html2canvas(resultCard);
+      const imgData = canvas.toDataURL("image/png");
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'pt', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const imgWidth = pageWidth - 40;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+      pdf.save("student_result.pdf");
+    }
+  </script>
+</body>
+</html>

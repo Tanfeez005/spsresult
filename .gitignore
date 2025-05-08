@@ -1,0 +1,29 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+
+# OS / IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Optional npm cache directory
+.npm/
+
+# Coverage reports
+coverage/
+
+# Build output
+dist/
+build/
+
+# Excel files (optional)
+*.xlsx
