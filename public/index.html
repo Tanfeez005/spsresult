@@ -2,37 +2,124 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Student Result Portal</title>
+  <title>SPS School - Student Result Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      font-family: 'Georgia', serif;
-      background-color: #fdf6e3;
-      color: #333;
-      padding: 20px;
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    h1 {
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fefefe;
+      color: #333;
+    }
+
+    header {
+      background-color: #004080;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+
+    .carousel {
+      position: relative;
+      overflow: hidden;
+      height: 400px;
+    }
+
+    .slides {
+      display: flex;
+      width: 300%;
+      animation: slide 15s infinite;
+    }
+
+    .slides img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+
+    @keyframes slide {
+      0% { transform: translateX(0); }
+      33% { transform: translateX(-100%); }
+      66% { transform: translateX(-200%); }
+      100% { transform: translateX(0); }
+    }
+
+    .section {
+      padding: 40px 20px;
       text-align: center;
-      margin-bottom: 30px;
+    }
+
+    .section h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .section p {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .feature-card {
+      background: #f4f4f4;
+      padding: 20px;
+      border-radius: 8px;
+      width: 280px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .feature-card h4 {
+      margin-bottom: 10px;
+    }
+
+    footer {
+      background-color: #004080;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 50px;
     }
 
     form {
-      text-align: center;
-      margin-bottom: 30px;
+      margin-top: 30px;
     }
 
     input, button {
-      padding: 8px 14px;
+      padding: 10px 14px;
       font-size: 16px;
       margin: 5px;
-      width: 80%;
-      max-width: 250px;
+      width: 250px;
     }
 
     button {
-      background-color: #444;
+      background-color: #333;
       color: white;
       border: none;
       border-radius: 4px;
@@ -41,48 +128,14 @@
 
     .result-card {
       background: #fff;
-      width: 100%;
-      max-width: 794px; /* A4 width in pixels @96dpi */
-      min-height: 1123px; /* A4 height @96dpi */
+      width: 90%;
+      max-width: 794px;
+      min-height: 1123px;
       padding: 30px;
       border: 1px solid #000;
-      margin: 0 auto 30px auto;
+      margin: 20px auto;
       box-shadow: 0px 0px 10px #ccc;
       box-sizing: border-box;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .header img {
-      width: 80px;
-      height: auto;
-    }
-
-    .school-details {
-      text-align: center;
-      flex: 1;
-    }
-
-    .school-details h2 {
-      margin: 0;
-      font-size: 24px;
-    }
-
-    .school-details p {
-      margin: 4px 0;
-    }
-
-    .title {
-      text-align: center;
-      margin: 10px 0;
-      font-weight: bold;
-      font-size: 20px;
-      text-decoration: underline;
     }
 
     table {
@@ -99,47 +152,84 @@
     }
 
     th {
-      background-color: #eee8d5;
+      background-color: #eee;
     }
 
     #downloadBtn {
       display: none;
-      text-align: center;
+      margin-bottom: 30px;
     }
 
-    @media screen and (max-width: 600px) {
-      input, button {
-        width: 100%;
-        margin: 10px 0;
-      }
-
-      .header {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .header img {
-        margin-bottom: 10px;
-      }
+    @media screen and (max-width: 768px) {
+      .slides img { height: 250px; }
+      .features { flex-direction: column; align-items: center; }
+      input, button { width: 100%; max-width: 90%; }
     }
   </style>
 </head>
 <body>
-  <h1>Student Result Portal</h1>
 
-  <form id="resultForm">
-    Class: <input type="text" id="class" required />
-    Roll No: <input type="text" id="roll" required />
-    <button type="submit">Get Result</button>
-  </form>
+  <!-- HEADER -->
+  <header>
+    <img src="logo.jpeg" alt="School Logo">
+    <nav>
+      <a href="#">Home</a>
+      <a href="#about">About</a>
+      <a href="#result">Result</a>
+    </nav>
+  </header>
 
-  <div id="result"></div>
-
-  <div style="text-align: center;">
-    <button id="downloadBtn" onclick="downloadPDF()">Download as PDF</button>
+  <!-- SLIDING BANNER -->
+  <div class="carousel">
+    <div class="slides">
+      <img src="slide1.jpg" alt="School View 1">
+      <img src="slide2.jpg" alt="Students Activity">
+      <img src="slide3.jpg" alt="Annual Day">
+    </div>
   </div>
 
-  <!-- jsPDF and html2canvas CDN -->
+  <!-- ABOUT -->
+  <div class="section" id="about">
+    <h2>About SPS Middle School</h2>
+    <p>SPS Middle School is committed to excellence in education and the overall development of students. We nurture curiosity, creativity, and critical thinking in a safe and inclusive environment.</p>
+    <div class="features">
+      <div class="feature-card">
+        <h4>🧑‍🏫 Qualified Teachers</h4>
+        <p>Experienced faculty guiding each student personally.</p>
+      </div>
+      <div class="feature-card">
+        <h4>🏫 Smart Classrooms</h4>
+        <p>Interactive digital learning spaces for enhanced understanding.</p>
+      </div>
+      <div class="feature-card">
+        <h4>🎨 Co-Curricular</h4>
+        <p>Art, music, sports, and more for holistic development.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT FORM -->
+  <div class="section" id="result">
+    <h2>Check Your Result</h2>
+    <form id="resultForm">
+      <input type="text" id="class" placeholder="Enter Class" required>
+      <input type="text" id="roll" placeholder="Enter Roll No" required>
+      <br>
+      <button type="submit">Get Result</button>
+    </form>
+
+    <div id="resultDisplay"></div>
+    <div style="text-align: center;">
+      <button id="downloadBtn" onclick="downloadPDF()">Download as PDF</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2025 SPS Middle School. All rights reserved.
+  </footer>
+
+  <!-- jsPDF and html2canvas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
@@ -152,8 +242,10 @@
       const res = await fetch(`/result?class=${studentClass}&roll=${roll}`);
       const data = await res.json();
 
+      const display = document.getElementById('resultDisplay');
+
       if (data.error) {
-        document.getElementById('result').innerHTML = `<p>${data.error}</p>`;
+        display.innerHTML = `<p>${data.error}</p>`;
         document.getElementById('downloadBtn').style.display = "none";
         return;
       }
@@ -165,26 +257,19 @@
           <td>${m.obtainedMarks}</td>
         </tr>`).join('');
 
-      document.getElementById('result').innerHTML = `
+      display.innerHTML = `
         <div class="result-card" id="resultCard">
-          <div class="header">
-            <img src="logo.jpeg" alt="School Logo" />
-            <div class="school-details">
-              <h2>${data.schoolName}</h2>
-              <p>${data.schoolAddress}</p>
-            </div>
-          </div>
-          <div class="title">Terminal Examination Result</div>
+          <h2>${data.schoolName}</h2>
+          <p><strong>Address:</strong> ${data.schoolAddress}</p>
+          <hr />
           <p><strong>Name:</strong> ${data.studentName}</p>
           <p><strong>Father's Name:</strong> ${data.fatherName}</p>
           <p><strong>Class:</strong> ${data.class}</p>
           <p><strong>Roll No:</strong> ${data.roll}</p>
-          <hr />
           <table>
             <tr><th>Subject</th><th>Full Marks</th><th>Obtained Marks</th></tr>
             ${subjectsHtml}
           </table>
-          <hr />
           <p><strong>Total Marks:</strong> ${data.total}</p>
           <p><strong>Percentage:</strong> ${data.percentage}%</p>
           <p><strong>Division:</strong> ${data.division}</p>
@@ -198,13 +283,11 @@
       const resultCard = document.getElementById("resultCard");
       const canvas = await html2canvas(resultCard);
       const imgData = canvas.toDataURL("image/png");
-
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF('p', 'pt', 'a4');
       const pageWidth = pdf.internal.pageSize.getWidth();
       const imgWidth = pageWidth - 40;
       const imgHeight = canvas.height * imgWidth / canvas.width;
-
       pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
       pdf.save("student_result.pdf");
     }
