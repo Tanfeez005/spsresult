@@ -56,8 +56,8 @@ app.get('/result', (req, res) => {
     'Fail';
 
   res.json({
-    schoolName: "ABC High School",
-    schoolAddress: "123 Main Road, Springfield",
+    schoolName: "STAR PUBLIC SCHOOL",
+    schoolAddress: "Main road Mathia Bazar, Maghwal Mathia",
     studentName: student.Name,
     fatherName: student.FatherName,
     class: studentClass,

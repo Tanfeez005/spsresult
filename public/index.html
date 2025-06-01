@@ -42,25 +42,35 @@
       overflow: hidden;
       height: 400px;
     }
+.slides {
+  display: flex;
+  width: 300%;
+  animation: slide 25s infinite;
+}
 
-    .slides {
-      display: flex;
-      width: 300%;
-      animation: slide 15s infinite;
-    }
+.slides img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  transform: scale(1);
+  animation: zoom 25s infinite;
+}
 
-    .slides img {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-    }
+@keyframes slide {
+  0%, 100% { transform: translateX(0); }
+  33% { transform: translateX(-100%); }
+  66% { transform: translateX(-200%); }
+}
 
-    @keyframes slide {
-      0% { transform: translateX(0); }
-      33% { transform: translateX(-100%); }
-      66% { transform: translateX(-200%); }
-      100% { transform: translateX(0); }
-    }
+@keyframes zoom {
+  0%, 33%, 66%, 100% {
+    transform: scale(1.1); /* Zoom in */
+  }
+  16.5%, 49.5%, 82.5% {
+    transform: scale(1); /* Zoom out midpoint */
+  }
+}
+
 
     .section {
       padding: 40px 20px;
@@ -125,18 +135,19 @@
       border-radius: 4px;
       cursor: pointer;
     }
-
     .result-card {
-      background: #fff;
-      width: 90%;
-      max-width: 794px;
-      min-height: 1123px;
-      padding: 30px;
-      border: 1px solid #000;
-      margin: 20px auto;
-      box-shadow: 0px 0px 10px #ccc;
-      box-sizing: border-box;
-    }
+  background: #f0f8ff;  /* Light pastel blue background */
+  width: 90%;
+  max-width: 794px;
+  min-height: 1123px;
+  padding: 30px;
+  border: 1px solid #000;
+  margin: 20px auto;
+  box-shadow: 0px 0px 10px #ccc;
+  box-sizing: border-box;
+}
+
+
 
     table {
       width: 100%;
@@ -182,9 +193,9 @@
   <!-- SLIDING BANNER -->
   <div class="carousel">
     <div class="slides">
-      <img src="slide1.jpg" alt="School View 1">
-      <img src="slide2.jpg" alt="Students Activity">
-      <img src="slide3.jpg" alt="Annual Day">
+      <img src="slide1.jpeg" alt="School View 1">
+      <img src="slide2.jpeg" alt="Students Activity">
+      <img src="slide3.jpeg" alt="Annual Day">
     </div>
   </div>
 
@@ -258,24 +269,101 @@
         </tr>`).join('');
 
       display.innerHTML = `
-        <div class="result-card" id="resultCard">
-          <h2>${data.schoolName}</h2>
-          <p><strong>Address:</strong> ${data.schoolAddress}</p>
-          <hr />
-          <p><strong>Name:</strong> ${data.studentName}</p>
-          <p><strong>Father's Name:</strong> ${data.fatherName}</p>
-          <p><strong>Class:</strong> ${data.class}</p>
-          <p><strong>Roll No:</strong> ${data.roll}</p>
-          <table>
-            <tr><th>Subject</th><th>Full Marks</th><th>Obtained Marks</th></tr>
-            ${subjectsHtml}
-          </table>
-          <p><strong>Total Marks:</strong> ${data.total}</p>
-          <p><strong>Percentage:</strong> ${data.percentage}%</p>
-          <p><strong>Division:</strong> ${data.division}</p>
-          <p><strong>Remarks:</strong> ${data.description}</p>
-        </div>
-      `;
+  <div class="result-card" id="resultCard">
+ <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">
+  <div style="flex: 0 0 auto;">
+    <img src="logo.jpeg" alt="School Logo" style="height: 80px; margin-right: 10px; margin-left: 0;" />
+  </div>
+  <div style="flex: 1; text-align: center;">
+    <h2 style="font-size: 24px; margin-bottom: 5px;">${data.schoolName}</h2>
+    <p style="font-size: 14px; margin-bottom: 10px;">${data.schoolAddress}</p>
+    <h3 style="font-size: 20px; margin: 20px 0 10px;">First Terminal Examination Result - ${new Date().getFullYear()}</h3>
+  </div>
+</div>
+
+    <hr style="margin: 20px 0;" />
+    <table style="width: 100%; margin-top: 10px; font-size: 15px; border-collapse: collapse;">
+      <tr>
+        <td style="width: 35%; text-align: left; padding: 6px;"><strong>Name of Student:</strong></td>
+        <td style="text-align: left; padding: 6px;">${data.studentName}</td>
+      </tr>
+      <tr>
+        <td style="text-align: left; padding: 6px;"><strong>Father's Name:</strong></td>
+        <td style="text-align: left; padding: 6px;">${data.fatherName}</td>
+      </tr>
+      <tr>
+        <td style="text-align: left; padding: 6px;"><strong>Class:</strong></td>
+        <td style="text-align: left; padding: 6px;">${data.class}</td>
+      </tr>
+      <tr>
+        <td style="text-align: left; padding: 6px;"><strong>Roll Number:</strong></td>
+        <td style="text-align: left; padding: 6px;">${data.roll}</td>
+      </tr>
+    </table>
+
+    <table style="margin-top: 30px; border-collapse: collapse; width: 100%;">
+      <thead>
+        <tr>
+          <th style="border: 1px solid #000; padding: 8px;">Subject</th>
+          <th style="border: 1px solid #000; padding: 8px;">Full Marks</th>
+          <th style="border: 1px solid #000; padding: 8px;">Pass Marks</th>
+          <th style="border: 1px solid #000; padding: 8px;">Marks Obtained</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.marks.map(m => `
+          <tr>
+            <td style="border: 1px solid #000; padding: 8px;">${m.subject}</td>
+            <td style="border: 1px solid #000; padding: 8px;">${m.fullMarks}</td>
+            <td style="border: 1px solid #000; padding: 8px;">${Math.floor(m.fullMarks * 0.3)}</td>
+            <td style="border: 1px solid #000; padding: 8px;">${m.obtainedMarks}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+
+    <!-- Total, Percentage, Division, Remarks BELOW marks table -->
+    <table style="width: 100%; margin-top: 20px; font-size: 15px; border-collapse: collapse;">
+      <tr>
+        <td style="width: 35%; text-align: left; padding: 6px;"><strong>Total Marks:</strong></td>
+        <td style="text-align: left; padding: 6px;">${data.total}</td>
+      </tr>
+      <tr>
+        <td style="text-align: left; padding: 6px;"><strong>Percentage:</strong></td>
+        <td style="text-align: left; padding: 6px;">${data.percentage}%</td>
+      </tr>
+      <tr>
+        <td style="text-align: left; padding: 6px;"><strong>Division:</strong></td>
+        <td style="text-align: left; padding: 6px;">${data.division}</td>
+      </tr>
+      <tr>
+        <td style="text-align: left; padding: 6px;"><strong>Remarks:</strong></td>
+        <td style="text-align: left; padding: 6px;">${data.description}</td>
+      </tr>
+    </table>
+
+   <!-- Note and Signature below -->
+<div style="display: flex; justify-content: space-between; margin-top: 40px; font-size: 14px; font-style: italic;">
+  <div style="flex: 1; color: #555; text-align: left;">
+    <p><strong>Note:</strong> This is a system generated result. No need for physical verification.</p>
+  </div>
+  <div style="flex: 1; text-align: right;">
+  <div style="position: relative; width: 250px; height: auto; display: inline-block; margin-top: 10px;">
+    <img src="stamp.jpeg" alt="School Stamp" style="width: 250px; height: auto; position: absolute; top: 0; left: 0; opacity: 0.6;">
+    <img src="sign.jpeg" alt="Principal Signature" style="width: 100px; height: auto; position: absolute; top: 30px; left: 70px;">
+    <!-- Empty div used to maintain space for absolute images -->
+    <div style="padding-top: 120px;"></div>
+  </div>
+
+  <p style="margin-top: -50px;">Principal's Signature & Stamp</p>
+</div>
+
+  </div>
+</div>
+
+  
+`;
+
       document.getElementById('downloadBtn').style.display = "inline-block";
     });
 
