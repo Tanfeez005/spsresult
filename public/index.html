@@ -42,18 +42,53 @@
       overflow: hidden;
       height: 400px;
     }
+/* Container for the slider */
+.slider {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  height: 400px;
+}
+
+/* Slide wrapper */
 .slides {
   display: flex;
-  width: 300%;
+  width: 300%; /* 3 images */
   animation: slide 25s infinite;
 }
 
+/* Each image */
 .slides img {
   width: 100%;
   height: 400px;
   object-fit: cover;
-  transform: scale(1);
   animation: zoom 25s infinite;
+}
+
+/* Zoom effect for images */
+@keyframes zoom {
+  0%, 100% {
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(0.5);
+  }
+}
+
+/* Slide left to right */
+@keyframes slide {
+  0% {
+    transform: translateX(0%);
+  }
+  33.33% {
+    transform: translateX(0%);
+  }
+  66.66% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
 }
 
 @keyframes slide {
@@ -181,14 +216,55 @@
 <body>
 
   <!-- HEADER -->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>School Result Portal</title>
+  <style>
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background-color: #2180b3;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    header p {
+      font-size: 28px; /* Increased text size */
+      font-weight: bold;
+      margin: 0 20px;
+    }
+
+    nav a {
+      font-size: 20px; /* Increased nav link size */
+      margin-left: 15px;
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
   <header>
     <img src="logo.jpeg" alt="School Logo">
+    <p>Star Public School</p>
     <nav>
       <a href="#">Home</a>
       <a href="#about">About</a>
       <a href="#result">Result</a>
     </nav>
   </header>
+</body>
+</html>
+
 
   <!-- SLIDING BANNER -->
   <div class="carousel">
@@ -201,7 +277,7 @@
 
   <!-- ABOUT -->
   <div class="section" id="about">
-    <h2>About SPS Middle School</h2>
+    <h2>About Star Public School</h2>
     <p>SPS Middle School is committed to excellence in education and the overall development of students. We nurture curiosity, creativity, and critical thinking in a safe and inclusive environment.</p>
     <div class="features">
       <div class="feature-card">
